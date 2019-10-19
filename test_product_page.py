@@ -1,5 +1,7 @@
 import pytest
+import time
 
+from .pages.base_page import BasePage
 from .pages.locators import ProductPageLocators
 from .pages.login_page import LoginPage
 from .pages.product_page import ProductPage
@@ -63,27 +65,26 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
 
 @pytest.mark.login_auth
 class TestUserAddToBasketFromProductPage():
-    @pytest.mark.need_review
-    def test_user_can_add_product_to_basket(self, browser, generate_email, generate_password):
-        link = "http://selenium1py.pythonanywhere.com/"
-        login_page = LoginPage(browser, link)
-        login_page.open()
-        login_page.register_new_user(generate_email, generate_password)
-        login_page.should_be_authorized_user()
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/ru/accounts/login/"
+        email = str(time.time()) + "@fakemail.org"
+        password = str(time.time())
+        page_login = LoginPage(browser, link)
+        page_login.open()
+        page_login.register_new_user(email, password)
+        page_base = BasePage(browser, link)
+        page_base.should_be_authorized_user()
 
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser):
         link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
         item_page = ProductPage(browser, link)
         item_page.open()
         item_page.add_to_card()
         item_page.check_product_name_on_page_and_in_message()
 
-    def test_user_cant_see_success_message(self, browser, generate_email, generate_password):
-        link = "http://selenium1py.pythonanywhere.com/"
-        login_page = LoginPage(browser, link)
-        login_page.open()
-        login_page.register_new_user(generate_email, generate_password)
-        login_page.should_be_authorized_user()
-
+    def test_user_cant_see_success_message(self, browser):
         link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
         item_page = ProductPage(browser, link)
         item_page.open()
