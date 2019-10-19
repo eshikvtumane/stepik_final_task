@@ -14,22 +14,6 @@ class ProductPage(BasePage):
         except NoSuchElementException:
             return False
 
-    def open_basket(self):
-        try:
-            self.browser.find_element(*ProductPageLocators.BASKET_BUTTON).click()
-            return True
-        except NoSuchElementException:
-            return False
-
-    def is_basket_empty(self):
-        try:
-            self.browser.find_element(*ProductPageLocators.BASKET_EMPTY_MESSAGE).click()
-            result = True
-        except NoSuchElementException:
-            result = False
-
-        assert result is True, 'Basket is not empty.'
-
     def get_product_name(self)->str:
         try:
             return self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_TEXT).text

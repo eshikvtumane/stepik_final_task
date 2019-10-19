@@ -1,6 +1,7 @@
 import pytest
 import time
 
+from .pages.basket_page import BasketPage
 from .pages.base_page import BasePage
 from .pages.locators import ProductPageLocators
 from .pages.login_page import LoginPage
@@ -31,12 +32,13 @@ def test_guest_can_add_product_to_basket(browser, link):
 
 
 @pytest.mark.need_review
+@pytest.mark.tt
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-    item_page = ProductPage(browser, link)
-    item_page.open()
-    item_page.open_basket()
-    item_page.is_basket_empty()
+    basket_page = BasketPage(browser, link)
+    basket_page.open()
+    basket_page.open_basket()
+    basket_page.is_basket_empty()
 
 
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser, link):
