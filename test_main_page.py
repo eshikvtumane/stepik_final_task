@@ -8,15 +8,6 @@ from .pages.main_page import MainPage
 from .pages.locators import ProductPageLocators
 
 
-@pytest.mark.need_review
-def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
-    link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-    item_page = ProductPage(browser, link)
-    item_page.open()
-    item_page.open_basket()
-    item_page.is_basket_empty()
-
-
 @pytest.mark.xfail(strict=True)
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
